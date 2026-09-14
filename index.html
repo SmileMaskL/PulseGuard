@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PulseGuard - 가벼운 PC 상태 감시 프로그램 | 저사양 PC 다운 예방</title>
+<meta name="description" content="오래된 저사양 PC의 CPU·메모리·디스크 상태를 조용히 감시하다가 문제가 생기기 전에 알려주는 초경량 프로그램. 평소엔 거의 아무 자원도 쓰지 않습니다.">
+<link rel="canonical" href="https://smilemaskl.github.io/pulseguard/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PulseGuard - 가벼운 PC 상태 감시 프로그램">
+<meta property="og:description" content="저사양 PC가 갑자기 멈추거나 느려지기 전에 미리 알려주는 초경량 감시 프로그램.">
+<meta property="og:url" content="https://smilemaskl.github.io/pulseguard/">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<style>
+:root{
+  --bg:#0f172a; --card:#16213e; --text:#eef2ff; --muted:#9aa5c7;
+  --accent:#3b82f6; --accent-dark:#1e40af; --border:#28345c;
+  --danger:#ef4444; --good:#22c55e; --surface:#0b1220;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;padding-bottom:60px;}
+.topbar{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border);}
+.topbar strong{font-size:1.1rem;}
+main{max-width:720px;margin:0 auto;padding:0 20px;}
+.hero{padding:48px 0 24px;text-align:center;}
+.hero h1{font-size:1.9rem;line-height:1.4;margin:0 0 12px;}
+.hero p{color:var(--muted);font-size:1.02rem;line-height:1.7;}
+.badge{display:inline-block;background:var(--accent-dark);color:#fff;font-size:.8rem;padding:4px 10px;border-radius:999px;margin-bottom:14px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin:18px 0;}
+h2{font-size:1.15rem;margin-top:0;}
+ul{line-height:1.8;padding-left:20px;}
+.pricing{display:flex;gap:14px;flex-wrap:wrap;}
+.plan{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.plan h3{margin-top:0;}
+.price{font-size:1.6rem;font-weight:700;margin:6px 0;}
+.price span{font-size:.85rem;color:var(--muted);font-weight:400;}
+.btn{display:inline-block;text-align:center;background:var(--accent);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600;width:100%;margin-top:10px;}
+.btn:hover{background:var(--accent-dark);}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+.notice{font-size:.85rem;color:var(--muted);background:var(--surface);padding:14px 16px;border-radius:10px;line-height:1.7;}
+.related-links a{color:var(--accent);text-decoration:none;}
+.compare-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:10px;}
+.compare-table th,.compare-table td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--border);}
+.compare-table th{color:var(--muted);font-weight:600;}
+.compare-table tr:last-child td{border-bottom:none;}
+footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:40px;}
+footer a{color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <strong>🛡️ PulseGuard</strong>
+</div>
+
+<main>
+  <section class="hero">
+    <span class="badge">저사양 PC 전용 설계</span>
+    <h1>PC가 멈추기 전에,<br>조용히 지켜보는 프로그램</h1>
+    <p>오래된 데스크탑·노트북의 CPU·메모리·디스크 상태를 평소엔 거의 아무 자원도 안 쓰면서 감시하다가, 문제가 생기기 전에 알려드립니다.</p>
+  </section>
+
+  <section class="card">
+    <h2>왜 필요한가요?</h2>
+    <ul>
+      <li>디스크가 꽉 차서 갑자기 프로그램이 멈추는 걸 미리 방지</li>
+      <li>메모리 부족으로 느려지는 원인을 로그로 남겨 추적 가능</li>
+      <li>감시 프로그램 자체가 무겁다면 의미가 없다는 원칙으로 설계 — 평소 메모리 사용량 10MB 미만</li>
+      <li>인터넷 연결 없이도 기본 기능(로컬 로그)은 완전히 동작</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>요금제 — 정확한 차이</h2>
+    <table class="compare-table">
+      <tr><th></th><th>무료</th><th>Pro (월 2,900원 구독)</th></tr>
+      <tr><td>상태 확인 주기</td><td>60초마다</td><td>60초마다</td></tr>
+      <tr><td>로컬 로그 기록</td><td>✔ (최근 약 1~2일치 보관)</td><td>✔ (최근 약 2주치 보관)</td></tr>
+      <tr><td>PC 화면 알림(무료 기능)</td><td>✔</td><td>✔</td></tr>
+      <tr><td>로컬 실시간 대시보드</td><td>✔ (localhost:8765, 이 PC에서만 열림)</td><td>✔</td></tr>
+      <tr><td>디스코드·슬랙 원격 알림</td><td>✘</td><td>✔ (내가 자리 비웠을 때도 수신)</td></tr>
+      <tr><td>이력 CSV 내보내기</td><td>✘</td><td>✔</td></tr>
+      <tr><td>추가 결제</td><td>없음, 평생 무료</td><td>월 2,900원, 해지 시 그달까지만 사용</td></tr>
+    </table>
+    <div class="pricing" style="margin-top:14px">
+      <div class="plan">
+        <h3>무료</h3>
+        <div class="price">0원 <span>/ 평생</span></div>
+        <a class="btn ghost" href="https://github.com/SmileMaskL/PulseGuard" target="_blank" rel="noopener">무료로 받기</a>
+      </div>
+      <div class="plan">
+        <h3>Pro</h3>
+        <div class="price">월 2,900원 <span>/ 구독</span></div>
+        <a class="btn" id="buyLink" href="#" target="_blank" rel="noopener">Pro 구독하기</a>
+      </div>
+    </div>
+    <p class="notice">구독은 매달 자동 결제되며, 해지하면 결제한 달까지는 Pro 기능을 계속 쓰고 다음 달부터 무료로 전환됩니다. 무료 기능은 구독 여부와 상관없이 평생 그대로 사용할 수 있습니다.</p>
+  </section>
+
+  <section class="card">
+    <h2>설치 방법</h2>
+    <ol>
+      <li>Python이 설치되어 있어야 합니다 (없다면 <a href="https://www.python.org/downloads/" target="_blank" rel="noopener" style="color:var(--accent)">python.org</a>에서 무료 설치)</li>
+      <li><a href="https://github.com/SmileMaskL/pulseguard" target="_blank" rel="noopener" style="color:var(--accent)">GitHub 저장소</a>에서 내려받기</li>
+      <li><code>python pulseguard.py</code> 실행 — 바로 무료 감시 시작</li>
+      <li>Pro 구독 후 받은 라이선스 키로 <code>python pulseguard.py activate 키값</code> 실행하면 Pro 기능 활성화</li>
+    </ol>
+    <p class="notice">Windows 작업 스케줄러나 Linux systemd에 등록하면 컴퓨터 켤 때마다 자동으로 조용히 실행되도록 만들 수 있습니다. 평소엔 거의 자원을 쓰지 않기 때문에 저사양 PC에서도 안심하고 켜두셔도 됩니다.</p>
+  </section>
+
+  <section class="card related-links">
+    <h2>같이 보면 좋은 사이트</h2>
+    <ul>
+      <li>🖼️ <a href="https://smilemaskl.github.io/pixelbatch/" target="_blank" rel="noopener">PixelBatch — 사진 일괄 편집</a></li>
+      <li>🧮 <a href="https://smilemaskl.github.io/" target="_blank" rel="noopener">연봉·퇴직금·재산세 계산기</a></li>
+      <li>🎯 <a href="https://smilemaskl.github.io/benefit-hunter/" target="_blank" rel="noopener">지원금헌터 — 매일 정부지원금 정보</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    &copy; 2026 SmileMaskL · <a href="privacy.html">개인정보처리방침</a>
+  </footer>
+</main>
+
+<script>
+  document.getElementById('buyLink').href = 'https://blackhole26.gumroad.com/l/pulseguard-pro';
+</script>
+</body>
+</html>
