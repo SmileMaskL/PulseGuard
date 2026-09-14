@@ -25,7 +25,13 @@ import urllib.parse
 from datetime import datetime
 
 APP_NAME = "PulseGuard"
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# PyInstaller로 exe로 묶으면 __file__이 실행 파일 위치가 아니라 임시 압축
+# 해제 폴더를 가리킨다 (sys.frozen이 그 신호) — 그러면 sys.executable을 써야
+# 실제 exe가 있는 폴더 기준으로 로그/설정을 저장할 수 있다.
+if getattr(sys, "frozen", False):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "pulseguard_data")
 LOG_FILE = os.path.join(DATA_DIR, "monitor.log")
 CSV_FILE = os.path.join(DATA_DIR, "history.csv")
