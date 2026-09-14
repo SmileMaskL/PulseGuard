@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://smilemaskl.github.io/pulseguard/sitemap.xml
+Sitemap: https://smilemaskl.github.io/PulseGuard/sitemap.xml
