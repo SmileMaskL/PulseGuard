@@ -37,7 +37,7 @@ LOG_FILE = os.path.join(DATA_DIR, "monitor.log")
 CSV_FILE = os.path.join(DATA_DIR, "history.csv")
 CONFIG_FILE = os.path.join(DATA_DIR, "config.json")
 
-GUMROAD_PRODUCT_PERMALINK = "pulseguard-pro"  # Gumroad에서 상품 만든 뒤 실제 permalink로 교체
+GUMROAD_PRODUCT_PERMALINK = "pulseguard"
 MAX_LICENSE_ACTIVATIONS = 3
 
 DEFAULT_CONFIG = {
