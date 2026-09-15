@@ -12,6 +12,7 @@ Pro(월 구독, Gumroad): 임계치 초과 시 웹훅(디스코드/슬랙) 알�
 import csv
 import json
 import os
+import re
 import shutil
 import signal
 import subprocess
@@ -36,6 +37,13 @@ DATA_DIR = os.path.join(BASE_DIR, "pulseguard_data")
 LOG_FILE = os.path.join(DATA_DIR, "monitor.log")
 CSV_FILE = os.path.join(DATA_DIR, "history.csv")
 CONFIG_FILE = os.path.join(DATA_DIR, "config.json")
+
+# 상시 감시 루프의 monitor.log(라인 수 기준 로테이션)는 그대로 두고, 그 위에
+# "이벤트성" 성공/실패(라이선스 인증, 웹훅 전송, 예기치 못한 예외)만 별도로
+# Log/Error, Log/Success에 월 폴더 단위로 남긴다. pulseguard_data/ 전체가
+# .gitignore 대상이라(사용자 PC의 개인 데이터) 저장소에는 올라가지 않는다.
+EVENT_LOG_ROOT = os.path.join(DATA_DIR, "Log")
+EVENT_LOG_RETENTION_MONTHS = 6
 
 GUMROAD_PRODUCT_PERMALINK = "pulseguard"
 MAX_LICENSE_ACTIVATIONS = 3
@@ -104,11 +112,15 @@ def activate_license(cfg, license_key: str) -> str:
         cfg["license_key"] = license_key
         cfg["is_pro"] = True
         save_config(cfg)
+        log_event_success("라이선스 인증 성공")
         return "인증 완료! Pro가 활성화되었습니다."
     if result["reason"] == "overused":
+        log_event_error(f"라이선스 인증 실패 - 초과 사용 (uses={result['uses']})")
         return f"이 키는 이미 {result['uses']}회 인증되어 더 이상 사용할 수 없습니다."
     if result["reason"] == "network":
+        log_event_error("라이선스 인증 실패 - 네트워크 오류")
         return "인터넷 연결을 확인해주세요."
+    log_event_error("라이선스 인증 실패 - 유효하지 않은 키")
     return "유효하지 않은 라이선스 키입니다."
 
 
@@ -153,8 +165,9 @@ def send_webhook_alert(webhook_url: str, message: str):
     )
     try:
         urllib.request.urlopen(req, timeout=10)
-    except urllib.error.URLError:
-        pass
+        log_event_success(f"웹훅 전송 성공: {message}")
+    except urllib.error.URLError as e:
+        log_event_error(f"웹훅 전송 실패: {message} (사유: {e})")
 
 
 def read_stats():
@@ -205,6 +218,40 @@ def write_log(line: str, max_lines: int):
     rotate_log_if_needed(max_lines)
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(line + "\n")
+
+
+def _write_event_log(kind: str, message: str):
+    now = datetime.now()
+    today = f"{now:%Y-%m-%d}"
+    dir_path = os.path.join(EVENT_LOG_ROOT, kind, today[:7])
+    os.makedirs(dir_path, exist_ok=True)
+    log_path = os.path.join(dir_path, f"{kind}_log_{today}.txt")
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(f"[{now:%Y-%m-%d %H:%M:%S}] {message}\n")
+
+
+def log_event_success(message: str):
+    _write_event_log("Success", message)
+
+
+def log_event_error(message: str):
+    _write_event_log("Error", message)
+
+
+def cleanup_old_event_logs(retention_months: int = EVENT_LOG_RETENTION_MONTHS):
+    now = datetime.now()
+    cutoff_year, cutoff_month = now.year, now.month - retention_months
+    while cutoff_month <= 0:
+        cutoff_month += 12
+        cutoff_year -= 1
+    cutoff_label = f"{cutoff_year:04d}-{cutoff_month:02d}"
+    for kind in ("Error", "Success"):
+        dir_path = os.path.join(EVENT_LOG_ROOT, kind)
+        if not os.path.isdir(dir_path):
+            continue
+        for entry in os.listdir(dir_path):
+            if re.fullmatch(r"\d{4}-\d{2}", entry) and entry < cutoff_label:
+                shutil.rmtree(os.path.join(dir_path, entry), ignore_errors=True)
 
 
 def write_csv_row(timestamp, cpu, mem, disk):
@@ -273,6 +320,7 @@ def main():
     is_pro = bool(cfg.get("is_pro"))
     max_lines = cfg["pro_log_max_lines"] if is_pro else cfg["free_log_max_lines"]
 
+    cleanup_old_event_logs()
     write_log(f"[{datetime.now():%Y-%m-%d %H:%M:%S}] ▶ {APP_NAME} 감시 시작 ({'Pro' if is_pro else '무료'})", max_lines)
 
     if cfg.get("dashboard_enabled", True):
@@ -305,6 +353,7 @@ def main():
                     send_webhook_alert(cfg["webhook_url"], f"⚠️ PulseGuard 경고: 디스크 {disk}%")
         except Exception as e:
             write_log(f"[{datetime.now():%Y-%m-%d %H:%M:%S}] 오류: {e}", max_lines)
+            log_event_error(f"감시 루프 오류: {e}")
 
         for _ in range(cfg["check_interval_seconds"]):
             if not _running:
